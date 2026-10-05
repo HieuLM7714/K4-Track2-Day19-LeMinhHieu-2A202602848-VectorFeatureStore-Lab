@@ -185,7 +185,9 @@ else:
 import pandas as pd
 entity_df = pd.DataFrame({
     "user_id": ["u_001", "u_002", "u_003"],
-    "event_timestamp": [NOW - timedelta(hours=2), NOW - timedelta(hours=1), NOW],
+    # Lookup time must be >= each user's feature event_timestamp (u_00i at
+    # NOW - i hours), else the PIT join finds no feature and drops the row.
+    "event_timestamp": [NOW, NOW - timedelta(minutes=30), NOW],
 })
 
 historical = fs.get_historical_features(
